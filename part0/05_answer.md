@@ -17,11 +17,14 @@ sequenceDiagram
     activate server
     server-->>browser: JavaScript file
     deactivate server
+    
+    Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
     activate server
     server-->>browser: [{"content": "45", "date": "2025-06-19T09:55:17.518Z"}, ...]
     deactivate server
 
+    Note right of browser: The browser executes the callback function that renders the notes
 
 ```
