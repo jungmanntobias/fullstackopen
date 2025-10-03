@@ -1,3 +1,5 @@
+import Course from './components/Course'
+
 const Header = (props) => <h1>{props.course}</h1>
 
 const Content = (props) => (
@@ -23,14 +25,6 @@ const Total = (props) => {
     </p>
   )
 }
-
-const Course = ({course}) => (
-  <div>
-    <Header course={course.name} />
-    <Content parts={course.parts} />
-    <Total parts={course.parts}/>
-  </div>
-)
 
 const App = () => {
   const courses = [
