@@ -28,11 +28,21 @@ const App = () => {
     setNewNumber('')    
   }
 
+  // Event handler for deleting numbers
+  const handleNumberDelete = (event) => {
+    if (window.confirm(`Delete ${event.target.name}?`)) {
+      const delete_id = event.target.id
+      // console.log("deleting", delete_id)
+      numberService.deleteNumber(delete_id)
+      setPersons(persons.filter(person => person.id !== delete_id))
+    }
+  }
+
   // Event handlers for changing values in input boxes
   const handleNameChange = (event) => {setNewName(event.target.value)}
   const handleNumberChange = (event) => {setNewNumber(event.target.value)}
   const handleSearchNameChange = (event) => {setSearchName(event.target.value)}
-
+  
   // Fetch initial state from server
   useEffect(() => {
     numberService
@@ -55,7 +65,7 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons = {persons} searchName = {searchName} />
+      <Persons persons = {persons} searchName = {searchName} deleteHandler = {handleNumberDelete}/>
     </div>
   )
 }
