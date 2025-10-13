@@ -10,15 +10,26 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
-  const existingNames = persons.map(person => person.name.toLowerCase())
 
   // Event handler for submitting the name
   const handleSubmit = (event) => {
     event.preventDefault()
     const newObject = {name: newName, number: newNumber}
+    const foundPerson = persons.find(person => person.name === newObject.name)
 
-    if (existingNames.includes(newObject.name.toLowerCase())) {
-      alert(`${newName} is already added to phonebook`)
+    if (foundPerson) {
+      // replace existing number if the user wants
+      if (window.confirm(`${newObject.name} is already added to the phonebook. Replace the old number with a new one?`)) {
+        const id = foundPerson.id
+        const changedPerson = {...foundPerson, number: newObject.number}
+        //console.log(id)
+
+        numberService.replace(id, changedPerson)
+          .then(response => {
+            setPersons(persons.map(person => person.id === id ? response : person))
+          })
+      }
+      // alert(`${newName} is already added to phonebook`)
     } else {
       numberService
         .create(newObject)

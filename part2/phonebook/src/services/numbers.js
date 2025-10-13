@@ -18,4 +18,10 @@ const deleteNumber = (id) => {
         .delete(`${baseurl}/${id}`)
 }
 
-export default {create, getAll, deleteNumber}
+const replace = (id, changedPerson) => (
+    axios
+        .put(`${baseurl}/${id}`, changedPerson)
+        .then(response => response.data)
+)
+
+export default {create, getAll, deleteNumber, replace}
