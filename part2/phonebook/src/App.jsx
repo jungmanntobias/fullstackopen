@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import axios from 'axios'
+import numberService from './services/numbers'
 
 
 const App = () => {
@@ -20,10 +20,10 @@ const App = () => {
     if (existingNames.includes(newObject.name.toLowerCase())) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      axios
-        .post("http://localhost:3001/persons", newObject)
-        .then(response => setPersons(persons.concat(response.data)))
-      }
+      numberService
+        .create(newObject)
+        .then(returnedObject => setPersons(persons.concat(returnedObject)))
+    }
     setNewName('')
     setNewNumber('')    
   }
@@ -35,11 +35,9 @@ const App = () => {
 
   // Fetch initial state from server
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        setPersons(response.data)
-      })
+    numberService
+      .getAll()
+      .then(returnedObjects => {setPersons(returnedObjects)})
   }, [])
 
   return (
