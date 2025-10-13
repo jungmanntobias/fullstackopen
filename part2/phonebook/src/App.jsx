@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import axios from 'axios'
 
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
@@ -14,13 +15,15 @@ const App = () => {
   // Event handler for submitting the name
   const handleSubmit = (event) => {
     event.preventDefault()
-    const newObject = {name: newName, number: newNumber, id : persons.length + 1}
+    const newObject = {name: newName, number: newNumber}
 
     if (existingNames.includes(newObject.name.toLowerCase())) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons(persons.concat(newObject))}
-
+      axios
+        .post("http://localhost:3001/persons", newObject)
+        .then(response => setPersons(persons.concat(response.data)))
+      }
     setNewName('')
     setNewNumber('')    
   }
@@ -30,12 +33,11 @@ const App = () => {
   const handleNumberChange = (event) => {setNewNumber(event.target.value)}
   const handleSearchNameChange = (event) => {setSearchName(event.target.value)}
 
+  // Fetch initial state from server
   useEffect(() => {
-    console.log("effect")
     axios
       .get("http://localhost:3001/persons")
       .then(response => {
-        console.log("promise fulfilled")
         setPersons(response.data)
       })
   }, [])
