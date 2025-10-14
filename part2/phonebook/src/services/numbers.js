@@ -13,10 +13,10 @@ const create = newObject => (
         .then(response => response.data)
 )
 
-const deleteNumber = (id) => {
+const deleteNumber = (id) => (
     axios
         .delete(`${baseurl}/${id}`)
-}
+)
 
 const replace = (id, changedPerson) => (
     axios

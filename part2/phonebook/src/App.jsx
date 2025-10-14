@@ -12,7 +12,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
-  const [notificationMessage, setNotificationMessage] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationColor, setNotificationColor] = useState('green')
 
   // Event handler for submitting the name
   const handleSubmit = (event) => {
@@ -38,6 +39,7 @@ const App = () => {
         .create(newObject)
         .then(returnedObject => setPersons(persons.concat(returnedObject)))
       setNotificationMessage(`Added ${newName}`)
+      setNotificationColor('green')
       setTimeout(() => setNotificationMessage(null), 5000)
     }
     setNewName('')
@@ -49,7 +51,13 @@ const App = () => {
     if (window.confirm(`Delete ${event.target.name}?`)) {
       const delete_id = event.target.id
       // console.log("deleting", delete_id)
-      numberService.deleteNumber(delete_id)
+      numberService
+        .deleteNumber(delete_id)
+        .catch(_ => {
+          setNotificationMessage(`Information of ${event.target.name} has already been removed from the server`)
+          setNotificationColor('red')
+          setTimeout(() => setNotificationMessage(null), 5000)
+        })
       setPersons(persons.filter(person => person.id !== delete_id))
     }
   }
@@ -70,7 +78,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter searchValue = {searchName} changeHandler = {handleSearchNameChange}/>
-      <Notification message={notificationMessage}/>
+      <Notification message={notificationMessage} color = {notificationColor}/>
       
       <h3>Add new number</h3>
       <PersonForm 
