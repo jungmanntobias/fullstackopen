@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import numberService from './services/numbers'
+import './index.css'
 
 
 const App = () => {
@@ -10,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('')
 
   // Event handler for submitting the name
   const handleSubmit = (event) => {
@@ -21,7 +24,7 @@ const App = () => {
       // replace existing number if the user wants
       if (window.confirm(`${newObject.name} is already added to the phonebook. Replace the old number with a new one?`)) {
         const id = foundPerson.id
-        const changedPerson = {...foundPerson, number: newObject.number}
+        const changedPerson = {...foundPerson, number: newNumber}
         //console.log(id)
 
         numberService.replace(id, changedPerson)
@@ -34,6 +37,8 @@ const App = () => {
       numberService
         .create(newObject)
         .then(returnedObject => setPersons(persons.concat(returnedObject)))
+      setNotificationMessage(`Added ${newName}`)
+      setTimeout(() => setNotificationMessage(null), 5000)
     }
     setNewName('')
     setNewNumber('')    
@@ -65,6 +70,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter searchValue = {searchName} changeHandler = {handleSearchNameChange}/>
+      <Notification message={notificationMessage}/>
       
       <h3>Add new number</h3>
       <PersonForm 
