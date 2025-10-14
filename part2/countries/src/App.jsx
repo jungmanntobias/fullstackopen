@@ -6,6 +6,7 @@ import countryService from './services/countries'
 const App = () => {
   const [countries, setCountries] = useState([])
   const [searchValue, setSearchValue] = useState('')
+  const api_key = import.meta.env.VITE_WEATHER_API_KEY
 
   // Event handlers for changing values in input boxes
   const handleSearchChange = (event) => {setSearchValue(event.target.value)}
@@ -23,7 +24,12 @@ const App = () => {
   return (
     <div>
       <Filter searchValue = {searchValue} changeHandler = {handleSearchChange}/>
-      <Countries countries = {countries} searchValue = {searchValue} clickHandler={clickHandler}/>
+      <Countries
+        countries = {countries}
+        searchValue = {searchValue}
+        clickHandler={clickHandler}
+        api_key = {api_key}
+      />
     </div>
   )
 }

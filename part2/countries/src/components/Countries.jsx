@@ -1,4 +1,8 @@
 
+import { useState, useEffect } from 'react'
+import countryService from '../services/countries'
+import axios from 'axios'
+
 const CountryDetails = ({country}) => {
   // console.log(country.languages.keys)
   return (
@@ -29,6 +33,30 @@ const CountryList = ({countries, clickHandler}) => {
   )
 }
 
+const Weather = ({country, api_key}) => {
+  
+  const [weather, setWeather] = useState(null)
+
+  useEffect(() => {
+    countryService
+      .getWeather(country, api_key)
+      .then(weather => setWeather(weather))
+  }, [country.name.common])
+
+  if (weather) {
+    // console.log(weather.weather[0].icon)
+    return (
+      <div>
+        <h2>Weather in {country.capital}</h2>
+        <p>Temperature {(weather.main.temp - 273.15).toFixed(2)} Celsius</p>
+        <img src = {`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}></img>
+        <p>Wind {weather.wind.speed.toFixed(2)} m/s</p>
+      </div>
+    )
+  }
+  
+}
+
 const Countries = (props) => {
   const matchingCountries = props.countries.filter(country => country.name.common.toLowerCase().includes(props.searchValue.toLowerCase()))
 
@@ -49,7 +77,8 @@ const Countries = (props) => {
     // console.log(country.languages.keys)
     return (
       <div>
-        <CountryDetails country ={matchingCountries[0]} />
+        <CountryDetails country ={country} />
+        <Weather country={country} api_key = {props.api_key} />
       </div>
     )
   }
