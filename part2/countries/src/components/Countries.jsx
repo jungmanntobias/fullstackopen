@@ -17,13 +17,12 @@ const CountryDetails = ({country}) => {
   )
 }
 
-const CountryList = ({countries}) => {
+const CountryList = ({countries, clickHandler}) => {
   return (
     <div>
         {countries.map(country =>
           <div key = {country.name.common}>
-            <p>{country.name.common} <button>Show</button> </p>
-            
+            <p>{country.name.common} <button value = {country.name.common} onClick={clickHandler}>Show</button> </p>
           </div>
         )}
     </div>
@@ -42,7 +41,7 @@ const Countries = (props) => {
   } else if (matchingCountries.length > 1) {
     return (
       <div>
-        <CountryList countries = {matchingCountries} />
+        <CountryList countries = {matchingCountries} clickHandler={props.clickHandler} />
       </div>
     )
   } else if (matchingCountries.length === 1) {

@@ -9,6 +9,7 @@ const App = () => {
 
   // Event handlers for changing values in input boxes
   const handleSearchChange = (event) => {setSearchValue(event.target.value)}
+  const clickHandler = (event) => {setSearchValue(event.target.value)}
   
   // Fetch initial state from server
   useEffect(() => {
@@ -22,7 +23,7 @@ const App = () => {
   return (
     <div>
       <Filter searchValue = {searchValue} changeHandler = {handleSearchChange}/>
-      <Countries countries = {countries} searchValue = {searchValue}/>
+      <Countries countries = {countries} searchValue = {searchValue} clickHandler={clickHandler}/>
     </div>
   )
 }
