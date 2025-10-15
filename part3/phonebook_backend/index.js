@@ -26,6 +26,16 @@ let persons = [
     }
 ]
 
+app.get('/info', (request, response) => {
+    const totalPersons = persons.length
+    const currentTime = new Date()
+    const html = `
+        <p>Phonebook has info for ${totalPersons} people</p>
+        <p>${currentTime}</p>
+    `
+    response.send(html)
+})
+
 app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
