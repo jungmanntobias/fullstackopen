@@ -1,7 +1,9 @@
 const express = require('express')
+var morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
     { 
@@ -77,7 +79,14 @@ app.post('/api/persons', (request, response) => {
 
     if (!body.number || !body.name) {
         return response.status(400).json({
-            error: 'content missing'
+            error: 'number or name missing'
+        })
+    }
+
+    const existingNames = persons.map(p => p.name)
+    if (existingNames.includes(body.name)) {
+        return response.status(400).json({
+            error: 'name already exists on the server'
         })
     }
 
