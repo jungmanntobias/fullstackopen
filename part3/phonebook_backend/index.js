@@ -55,6 +55,44 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+const randomId = () => {
+    const ids = persons.map(p => Number(p.id))
+    let found = false
+    let proposal = 0
+
+    while (!found) {
+        proposal = Math.floor(Math.random() * 1000)
+        //console.log(proposal)
+        if (!ids.includes(proposal)) {
+            found = true
+        }
+        //console.log(found)
+    }
+    return String(proposal)
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    //console.log("body received", body)
+
+    if (!body.number || !body.name) {
+        return response.status(400).json({
+            error: 'content missing'
+        })
+    }
+
+    //console.log("inserting new person")
+    const person = {
+        id: randomId(),
+        name: body.name,
+        number: body.number
+    }
+    
+    persons = persons.concat(person)
+
+    response.json(person)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
