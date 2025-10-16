@@ -32,12 +32,22 @@ const App = () => {
           .then(response => {
             setPersons(persons.map(person => person.id === id ? response : person))
           })
+          .catch(error => {
+            console.log(error.response.data.error)
+            setNotificationColor('red')
+            setNotificationMessage(error.response.data.error)
+          })
       }
       // alert(`${newName} is already added to phonebook`)
     } else {
       numberService
         .create(newObject)
         .then(returnedObject => setPersons(persons.concat(returnedObject)))
+        .catch(error => {
+          console.log(error.response.data.error)
+          setNotificationColor('red')
+          setNotificationMessage(error.response.data.error)
+        })
       setNotificationMessage(`Added ${newName}`)
       setNotificationColor('green')
       setTimeout(() => setNotificationMessage(null), 5000)

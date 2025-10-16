@@ -102,20 +102,6 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 })
 
-    // Person.findById(id)
-    //     .then(person => {
-    //         if (!person) {
-    //             return response.status(404).end()
-    //         }
-
-    //         person.name = name
-    //         person.number = number
-    //         return person.save().then((updatedPerson) => {
-    //             response.json(updatedPerson)
-    //         })
-    //     })
-    //     .catch(error => next(error))
-
 // Unknown endpoint handler
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
