@@ -47,6 +47,7 @@ const App = () => {
           console.log(error.response.data.error)
           setNotificationColor('red')
           setNotificationMessage(error.response.data.error)
+          setTimeout(() => setNotificationMessage(null), 5000)
         })
       setNotificationMessage(`Added ${newName}`)
       setNotificationColor('green')
