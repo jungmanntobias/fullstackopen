@@ -72,12 +72,6 @@ app.post('/api/persons', (request, response, next) => {
     const body = request.body
     //console.log("body received", body)
 
-    if (!body.number || !body.name) {
-        return response.status(400).json({
-            error: 'number or name missing'
-        })
-    }
-
     const person = new Person({
         name: body.name,
         number: body.number
@@ -94,20 +88,33 @@ app.put('/api/persons/:id', (request, response, next) => {
     const {name, number} = request.body
     const id = request.params.id
 
-    Person.findById(id)
-        .then(person => {
-            if (!person) {
-                return response.status(404).end()
-            }
+    Person.findByIdAndUpdate(
+        id,
+        {name, number},
+        {new:true, runValidators:true, context:'query'}
+    ).then(updatedPerson => {
+        if (!updatedPerson) {
+            return response.status(404).end()
+        } else {
+            response.json(updatedPerson)
+        }})
+    .catch(error => next(error))
 
-            person.name = name
-            person.number = number
-            return person.save().then((updatedPerson) => {
-                response.json(updatedPerson)
-            })
-        })
-        .catch(error => next(error))
 })
+
+    // Person.findById(id)
+    //     .then(person => {
+    //         if (!person) {
+    //             return response.status(404).end()
+    //         }
+
+    //         person.name = name
+    //         person.number = number
+    //         return person.save().then((updatedPerson) => {
+    //             response.json(updatedPerson)
+    //         })
+    //     })
+    //     .catch(error => next(error))
 
 // Unknown endpoint handler
 const unknownEndpoint = (request, response) => {
@@ -121,6 +128,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).send({error: error.message})
   }
 
   next(error)
