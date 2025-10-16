@@ -69,14 +69,8 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    Person.find({}).then(persons => {
-        const person = persons.find(p => p.id === request.params.id)
-
-        if (person) {
-            response.json(person)
-        } else {
-            response.status(404).end()
-        }
+    Person.findById(request.params.id).then(person => {
+        response.json(person)
     })
 })
 
@@ -84,22 +78,6 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(p => p.id !== request.params.id)
     response.status(204).end()
 })
-
-const randomId = () => {
-    const ids = persons.map(p => Number(p.id))
-    let found = false
-    let proposal = 0
-
-    while (!found) {
-        proposal = Math.floor(Math.random() * 1000)
-        //console.log(proposal)
-        if (!ids.includes(proposal)) {
-            found = true
-        }
-        //console.log(found)
-    }
-    return String(proposal)
-}
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -111,23 +89,14 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    const existingNames = persons.map(p => p.name)
-    if (existingNames.includes(body.name)) {
-        return response.status(400).json({
-            error: 'name already exists on the server'
-        })
-    }
-
-    //console.log("inserting new person")
-    const person = {
-        id: randomId(),
+    const person = new Person({
         name: body.name,
         number: body.number
-    }
+    })
     
-    persons = persons.concat(person)
-
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT
