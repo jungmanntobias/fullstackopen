@@ -64,7 +64,7 @@ const App = () => {
       // console.log("deleting", delete_id)
       numberService
         .deleteNumber(delete_id)
-        .catch(_ => {
+        .catch(() => {
           setNotificationMessage(`Information of ${event.target.name} has already been removed from the server`)
           setNotificationColor('red')
           setTimeout(() => setNotificationMessage(null), 5000)
