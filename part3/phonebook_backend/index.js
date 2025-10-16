@@ -24,6 +24,7 @@ app.use(morgan(function (tokens, req, res) {
     return tiny.join(' ')
 }))
 
+// Retrieving info
 app.get('/info', (request, response, next) => {
     Person.find({})
     .then(persons => {
