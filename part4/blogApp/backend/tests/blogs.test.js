@@ -22,6 +22,16 @@ test('number of blogs is as expected', async () => {
   assert.strictEqual(result.body.length, helper.initialBlogs.length)
 })
 
+test('blog unique identifier property is named id', async () => {
+    const result = await api.get('/api/blogs')
+
+    const blog = result.body[0]
+
+    assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, 'id'), true)
+    assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, '_id'), false)
+    assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, '__v'), false)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
