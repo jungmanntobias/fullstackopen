@@ -50,6 +50,21 @@ describe('HTTP requests work as intended', () => {
       assert(authors.includes('tobias jungmann'))
   })
 
+  test('missing likes-property defaults to 0', async () => {
+      const { likes, ...newBlog } = helper.newBlog
+
+      // console.log(newBlog)
+
+      await api.post('/api/blogs')
+              .send(newBlog)
+              .expect(201)
+              .expect('Content-Type', /application\/json/)
+
+      const blogsAfter = await helper.blogsInDB()
+      const addedBlog = blogsAfter.find(b => b.author === 'tobias jungmann')
+      assert.strictEqual(addedBlog.likes, 0)
+  })
+
 })
 
 after(async () => {
