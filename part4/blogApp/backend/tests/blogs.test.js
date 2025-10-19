@@ -5,6 +5,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
 const helper = require('../utils/testHelper')
+const blog = require('../models/blog')
 
 const api = supertest(app)
 
@@ -83,6 +84,20 @@ describe('HTTP requests work as intended', () => {
       // const blogsAfter = await helper.blogsInDB()
       // const addedBlog = blogsAfter.find(b => b.author === 'tobias jungmann')
       // assert.strictEqual(addedBlog.likes, 0)
+  })
+
+  test('deleting a blog works', async () => {
+      const allBlogs = await helper.blogsInDB()
+      const blogToDelete = allBlogs[0]
+
+      await api.delete(`/api/blogs/${blogToDelete.id}`)
+              .expect(204)
+
+      const allBlogsAfter = await helper.blogsInDB()
+      const titles = allBlogsAfter.map(b => b.title)
+
+      assert.strictEqual(allBlogsAfter.length, allBlogs.length - 1)
+      assert(!titles.includes(blogToDelete.title))
   })
 
 })
