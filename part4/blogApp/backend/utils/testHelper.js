@@ -43,14 +43,19 @@ const initialBlogs = [
 
 const initialUsers = [
   {
-    "username": "teemuteekkari1",
-    "password": "teemurules",
-    "name": "teemu teekkari",
+    "username": "michael1",
+    "password": "123456",
+    "name": "Michael Chan",
   },
   {
-    "username": "CR7",
-    "password": "suii123",
-    "name": "cristiano ronaldo"
+    "username": "edsgerman",
+    "password": "password1",
+    "name": "Edsger W. Dijkstra"
+  },
+  {
+    "username": "robert67",
+    "password": "password",
+    "name": "Robert C. Martin"
   }
 ]
 

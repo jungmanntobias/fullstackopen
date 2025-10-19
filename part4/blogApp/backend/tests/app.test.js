@@ -52,7 +52,7 @@ describe('fetching, adding, modifying and deleting blogs', () => {
       const blogsAfter = await helper.blogsInDB()
       const authors = blogsAfter.map(b => b.author)
       assert.strictEqual(blogsAfter.length, helper.initialBlogs.length + 1)
-      assert(authors.includes('tobias jungmann'))
+      assert(authors.includes(newBlog.author))
   })
 
   test('missing likes-property defaults to 0', async () => {
@@ -66,7 +66,7 @@ describe('fetching, adding, modifying and deleting blogs', () => {
               .expect('Content-Type', /application\/json/)
 
       const blogsAfter = await helper.blogsInDB()
-      const addedBlog = blogsAfter.find(b => b.author === 'tobias jungmann')
+      const addedBlog = blogsAfter.find(b => b.author === newBlog.author)
       assert.strictEqual(addedBlog.likes, 0)
   })
 
@@ -148,7 +148,26 @@ describe('fetching, adding, modifying and deleting users', () => {
     const usersAfter = await helper.usersInDB()
     assert.strictEqual(usersAfter.length, helper.initialUsers.length)
   })
+
+  test('creation succeeds with a fresh username', async () => {
+    const usersAtStart = await helper.usersInDB()
+    const newUser = helper.newUser
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDB()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    assert(usernames.includes(newUser.username))
+  })
 })
+
+
 
 after(async () => {
     await mongoose.connection.close()

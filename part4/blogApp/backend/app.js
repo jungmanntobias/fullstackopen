@@ -5,11 +5,12 @@ const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const blogRouter = require('./controllers/blog')
 const userRouter = require('./controllers/user')
+const config = require('./utils/config')
 
 const app = express()
 
 mongoose.set('strictQuery', false)
-const url = process.env.MONGODB_URI
+const url = config.MONGODB_URI
 logger.info('connecting to', url)
 mongoose
   .connect(url)
