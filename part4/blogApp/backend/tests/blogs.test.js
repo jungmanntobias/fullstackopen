@@ -65,6 +65,26 @@ describe('HTTP requests work as intended', () => {
       assert.strictEqual(addedBlog.likes, 0)
   })
 
+  test('missing title or url-property leads to bad request', async () => {
+      const { title, ...newBlogWithoutTitle } = helper.newBlog
+      const { url, ...newBlogWithoutUrl } = helper.newBlog
+
+
+      // console.log(newBlog)
+
+      await api.post('/api/blogs')
+              .send(newBlogWithoutTitle)
+              .expect(400)
+
+      await api.post('/api/blogs')
+              .send(newBlogWithoutUrl)
+              .expect(400)
+
+      // const blogsAfter = await helper.blogsInDB()
+      // const addedBlog = blogsAfter.find(b => b.author === 'tobias jungmann')
+      // assert.strictEqual(addedBlog.likes, 0)
+  })
+
 })
 
 after(async () => {
