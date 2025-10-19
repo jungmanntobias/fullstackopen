@@ -23,6 +23,7 @@ mongoose
   })
 
 app.use(express.json())
+app.use(middleware.getTokenFrom)
 app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogRouter)

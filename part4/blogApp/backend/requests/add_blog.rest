@@ -56,14 +56,17 @@ Content-Type: application/json
 ###
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvYmVydDY3IiwiaWQiOiI2OGY1NGFkMDI0ZTg2MDJlYzNkMjZhZWQiLCJpYXQiOjE3NjA5MDYwMTd9.YkCTfsyGWDxrMrzTn-JhDtx2RYvJ8Bpm4XyPh5D_XMQ
 
 {
   "title": "Type wars",
   "author": "Robert C. Martin",
   "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
   "likes": 2,
-  "id": "68f53c023552e5958a628155"
+  "id": "68f53c023552e5958a628154" 
 }
+###
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvYmVydDY3IiwiaWQiOiI2OGY1NGFkMDI0ZTg2MDJlYzNkMjZhZWQiLCJpYXQiOjE3NjA5MDYwMTd9.YkCTfsyGWDxrMrzTn-JhDtx2RYvJ8Bpm4XyPh5D_XMQ
 ###
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
