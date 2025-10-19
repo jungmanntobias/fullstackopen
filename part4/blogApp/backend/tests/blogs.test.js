@@ -86,6 +86,25 @@ describe('HTTP requests work as intended', () => {
       // assert.strictEqual(addedBlog.likes, 0)
   })
 
+  test('updating a blog works', async () => {
+      const allBlogs = await helper.blogsInDB()
+      const blogToUpdate = {...allBlogs[0], title: "modified title"}
+      // console.log(blogToUpdate)
+
+      await api.put(`/api/blogs/${blogToUpdate.id}`)
+              .send(blogToUpdate)
+              .expect(200)
+              .expect('Content-Type', /application\/json/)
+
+      const allBlogsAfter = await helper.blogsInDB()
+      const titles = allBlogsAfter.map(b => b.title)
+
+      assert.strictEqual(allBlogsAfter.length, allBlogs.length)
+      // console.log(titles)
+      // console.log(blogToUpdate)
+      assert(titles.includes(blogToUpdate.title))
+  })
+  
   test('deleting a blog works', async () => {
       const allBlogs = await helper.blogsInDB()
       const blogToDelete = allBlogs[0]
