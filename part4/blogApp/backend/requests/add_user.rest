@@ -2,7 +2,29 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "username": "te",
-  "password": "teemurules",
-  "name": "teemu teekkari"
+  "username": "michael1",
+  "password": "123456",
+  "name": "Michael Chan"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "edsgerman",
+  "password": "password1",
+  "name": "Edsger W. Dijkstra"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "robert67",
+  "password": "password",
+  "name": "Robert C. Martin"
 }
