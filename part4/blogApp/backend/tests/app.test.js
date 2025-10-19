@@ -4,14 +4,18 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
 const helper = require('../utils/testHelper')
-const blog = require('../models/blog')
 
 const api = supertest(app)
+
 
 beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
+    await User.deleteMany({})
+    await User.insertMany(helper.initialUsers)
 })
 
 describe('fetching, adding, modifying and deleting blogs', () => {
@@ -119,6 +123,31 @@ describe('fetching, adding, modifying and deleting blogs', () => {
       assert(!titles.includes(blogToDelete.title))
   })
 
+})
+
+//--test-concurrency=1 if needed
+
+describe('fetching, adding, modifying and deleting users', () => {
+
+  test('too short username or password raises error', async () => {
+    const newUser = helper.newUser
+    const newUserWithShortUsername = {...newUser, username: "ab"}
+    const newUserWithShortPassword = {...newUser, password: "ab"}
+
+    const res1 = await api.post('/api/users')
+            .send(newUserWithShortUsername)
+            .expect(400)
+    const res2 = await api.post('/api/users')
+                          .send(newUserWithShortPassword)
+                          .expect(400)
+                          .expect('Content-Type', /application\/json/)
+
+    assert(res1.body.error.includes('short'))
+    assert(res2.body.error.includes('short'))
+
+    const usersAfter = await helper.usersInDB()
+    assert.strictEqual(usersAfter.length, helper.initialUsers.length)
+  })
 })
 
 after(async () => {
