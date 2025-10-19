@@ -14,7 +14,7 @@ beforeEach(async () => {
     await Blog.insertMany(helper.initialBlogs)
 })
 
-describe('HTTP requests work as intended', () => {
+describe('fetching, adding, modifying and deleting blogs', () => {
 
   test('number of blogs is as expected', async () => {
     const result = await api
