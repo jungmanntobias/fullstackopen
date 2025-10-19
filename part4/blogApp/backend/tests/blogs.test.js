@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -13,23 +13,43 @@ beforeEach(async () => {
     await Blog.insertMany(helper.initialBlogs)
 })
 
-test('number of blogs is as expected', async () => {
-  const result = await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /json/)
+describe('HTTP requests work as intended', () => {
 
-  assert.strictEqual(result.body.length, helper.initialBlogs.length)
-})
+  test('number of blogs is as expected', async () => {
+    const result = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /json/)
 
-test('blog unique identifier property is named id', async () => {
-    const result = await api.get('/api/blogs')
+    assert.strictEqual(result.body.length, helper.initialBlogs.length)
+  })
 
-    const blog = result.body[0]
+  test('blog unique identifier property is named id', async () => {
+      const result = await api.get('/api/blogs')
+                              .expect(200)
+                              .expect('Content-Type', /application\/json/)
 
-    assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, 'id'), true)
-    assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, '_id'), false)
-    assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, '__v'), false)
+      const blog = result.body[0]
+
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, 'id'), true)
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, '_id'), false)
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(blog, '__v'), false)
+  })
+
+  test('post request creates a new blog post', async () => {
+      const newBlog = helper.newBlog
+
+      await api.post('/api/blogs')
+              .send(newBlog)
+              .expect(201)
+              .expect('Content-Type', /application\/json/)
+
+      const blogsAfter = await helper.blogsInDB()
+      const authors = blogsAfter.map(b => b.author)
+      assert.strictEqual(blogsAfter.length, helper.initialBlogs.length + 1)
+      assert(authors.includes('tobias jungmann'))
+  })
+
 })
 
 after(async () => {
