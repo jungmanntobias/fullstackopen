@@ -12,10 +12,13 @@ const api = supertest(app)
 
 
 beforeEach(async () => {
+    await User.deleteMany({})
+    for (const user of helper.initialUsers) {
+      await api.post('/api/users').send(user)
+    }
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
-    await User.deleteMany({})
-    await User.insertMany(helper.initialUsers)
+    
 })
 
 describe('fetching, adding, modifying and deleting blogs', () => {
@@ -42,9 +45,23 @@ describe('fetching, adding, modifying and deleting blogs', () => {
   })
 
   test('post request creates a new blog post', async () => {
+      // get token
       const newBlog = helper.newBlog
+      const user = helper.initialUsers.find(user => user.name === newBlog.author)
+
+      const loginContent = {
+        username: user.username,
+        password: user.password
+      }
+
+      const loginResponse = await api.post('/api/login')
+                                .send(loginContent)
+                                .expect(200)
+                                .expect('Content-Type', /application\/json/)
+      const token = loginResponse.body.token
 
       await api.post('/api/blogs')
+              .set('Authorization', `Bearer ${token}`)
               .send(newBlog)
               .expect(201)
               .expect('Content-Type', /application\/json/)
@@ -55,18 +72,40 @@ describe('fetching, adding, modifying and deleting blogs', () => {
       assert(authors.includes(newBlog.author))
   })
 
-  test('missing likes-property defaults to 0', async () => {
-      const { likes, ...newBlog } = helper.newBlog
+  test('missing token in post request fails with status code 401', async () => {
+      const newBlog = helper.newBlog
 
       // console.log(newBlog)
 
       await api.post('/api/blogs')
               .send(newBlog)
+              .expect(401)
+  })
+
+  test('missing likes-property defaults to 0', async () => {
+      const { likes, ...newBlog } = helper.newBlog
+
+      const user = helper.initialUsers.find(user => user.name === newBlog.author)
+
+      const loginContent = {
+        username: user.username,
+        password: user.password
+      }
+
+      const loginResponse = await api.post('/api/login')
+                                .send(loginContent)
+                                .expect(200)
+                                .expect('Content-Type', /application\/json/)
+      const token = loginResponse.body.token
+
+      await api.post('/api/blogs')
+              .set('Authorization', `Bearer ${token}`)
+              .send(newBlog)
               .expect(201)
               .expect('Content-Type', /application\/json/)
 
       const blogsAfter = await helper.blogsInDB()
-      const addedBlog = blogsAfter.find(b => b.author === newBlog.author)
+      const addedBlog = blogsAfter.find(b => b.title === newBlog.title)
       assert.strictEqual(addedBlog.likes, 0)
   })
 
@@ -74,14 +113,29 @@ describe('fetching, adding, modifying and deleting blogs', () => {
       const { title, ...newBlogWithoutTitle } = helper.newBlog
       const { url, ...newBlogWithoutUrl } = helper.newBlog
 
+      const user = helper.initialUsers.find(user => user.name === helper.newBlog.author)
+
+      const loginContent = {
+        username: user.username,
+        password: user.password
+      }
+
+      const loginResponse = await api.post('/api/login')
+                                .send(loginContent)
+                                .expect(200)
+                                .expect('Content-Type', /application\/json/)
+      const token = loginResponse.body.token
+
 
       // console.log(newBlog)
 
       await api.post('/api/blogs')
+              .set('Authorization', `Bearer ${token}`)
               .send(newBlogWithoutTitle)
               .expect(400)
 
       await api.post('/api/blogs')
+              .set('Authorization', `Bearer ${token}`)
               .send(newBlogWithoutUrl)
               .expect(400)
 

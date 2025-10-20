@@ -60,8 +60,8 @@ const initialUsers = [
 ]
 
 const newBlog = {
-        title: "test blog",
-        author: "tobias jungmann",
+        title: "Test Blog",
+        author: "Robert C. Martin",
         url: "https://test.com/",
         likes: 1,
       }
