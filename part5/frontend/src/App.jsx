@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -114,39 +115,42 @@ const App = () => {
 
       <h2>create new</h2>
       <Notification message={message} isError={isError} />
-      <form onSubmit={handleCreate}>
-          <div>
-            <label>
-              title
-              <input
-                type="text"
-                value={title}
-                onChange={({ target }) => setTitle(target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              author
-              <input
-                type="text"
-                value={author}
-                onChange={({ target }) => setAuthor(target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              url
-              <input
-                type="text"
-                value={url}
-                onChange={({ target }) => setUrl(target.value)}
-              />
-            </label>
-          </div>
-          <button type="submit">create</button>
+      <Togglable buttonLabel="create new blog">
+        <form onSubmit={handleCreate}>
+            <div>
+              <label>
+                title
+                <input
+                  type="text"
+                  value={title}
+                  onChange={({ target }) => setTitle(target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                author
+                <input
+                  type="text"
+                  value={author}
+                  onChange={({ target }) => setAuthor(target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                url
+                <input
+                  type="text"
+                  value={url}
+                  onChange={({ target }) => setUrl(target.value)}
+                />
+              </label>
+            </div>
+            <button type="submit">create</button>
         </form>
+      </Togglable>
+      
 
 
 
