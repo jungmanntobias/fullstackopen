@@ -1,7 +1,35 @@
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>  
-)
+import { useState } from 'react'
+
+const Blog = ({ blog }) => {
+  const blogStyle = {
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
+  const [visible, setVisible] = useState(false)
+  const [buttonLabel, setButtonLabel] = useState("view")
+
+  const showWhenVisible = { display: visible ? '' : 'none' }
+
+  const toggleVisibility = () => {
+    setVisible(!visible)
+    setButtonLabel(visible ? "view" : "hide")
+  }
+
+  return (
+    <div style={blogStyle}>
+      <p style={{ margin: 0 }}>{blog.title}: {blog.author} <button onClick={toggleVisibility}>{buttonLabel}</button></p>
+      <div style={showWhenVisible}>
+        <p style={{ margin: 0 }}>url: {blog.url}</p>
+        <p style={{ margin: 0 }}>likes: {blog.likes} <button>like</button></p>
+        <p style={{ margin: 0 }}>user: {blog.user.name}</p>
+      </div>
+    </div>
+  )
+}
 
 export default Blog
