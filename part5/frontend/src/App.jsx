@@ -9,17 +9,17 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
   const [isError, setIsError] = useState(true)
-  const [user, setUser] = useState(null) 
+  const [user, setUser] = useState(null)
 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -38,11 +38,11 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      
+
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
     } catch {
       setMessage('wrong credentials')
       setIsError(true)
@@ -52,7 +52,7 @@ const App = () => {
     }
   }
 
-  const createBlog = async ({title, author, url}) => {
+  const createBlog = async ({ title, author, url }) => {
     const newBlog = {
       title: title,
       author: author,
@@ -64,8 +64,8 @@ const App = () => {
     setIsError(false)
     setMessage(`a new blog ${title} by ${author} added`)
     setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      setMessage(null)
+    }, 5000)
 
   }
 
@@ -73,7 +73,7 @@ const App = () => {
     await blogService.like(blog)
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }
 
   const handleDelete = async (blog) => {
@@ -120,12 +120,12 @@ const App = () => {
 
   return (
     <div>
-      
-      <p>{user.name} logged in 
+
+      <p>{user.name} logged in
         <button type="submit" onClick={() => {
-            window.localStorage.removeItem('loggedBlogappUser')
-            setUser(null)
-          }}>
+          window.localStorage.removeItem('loggedBlogappUser')
+          setUser(null)
+        }}>
           log out
         </button>
       </p>
@@ -137,7 +137,7 @@ const App = () => {
       </Togglable>
 
       <h2>blogs</h2>
-      
+
       {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
         <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete}/>
       )}

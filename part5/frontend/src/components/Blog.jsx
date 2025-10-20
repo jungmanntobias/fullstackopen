@@ -12,13 +12,13 @@ const Blog = (props) => {
   }
 
   const [visible, setVisible] = useState(false)
-  const [buttonLabel, setButtonLabel] = useState("view")
+  const [buttonLabel, setButtonLabel] = useState('view')
 
   const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
-    setButtonLabel(visible ? "view" : "hide")
+    setButtonLabel(visible ? 'view' : 'hide')
   }
 
   return (
