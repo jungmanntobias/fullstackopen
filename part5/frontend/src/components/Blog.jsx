@@ -28,6 +28,7 @@ const Blog = (props) => {
         <p style={{ margin: 0 }}>url: {blog.url}</p>
         <p style={{ margin: 0 }}>likes: {blog.likes} <button onClick={() => props.handleLike(blog)}>like</button></p>
         <p style={{ margin: 0 }}>user: {blog.user.name}</p>
+        <button onClick={() => props.handleDelete(blog)}>delete</button>
       </div>
     </div>
   )

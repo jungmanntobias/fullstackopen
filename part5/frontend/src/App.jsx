@@ -76,6 +76,15 @@ const App = () => {
     )  
   }
 
+  const handleDelete = async (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.deleteBlog(blog)
+      blogService.getAll().then(blogs =>
+        setBlogs( blogs )
+      )
+    }
+  }
+
   if (user === null) {
     return (
       <div>
@@ -130,7 +139,7 @@ const App = () => {
       <h2>blogs</h2>
       
       {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={handleLike}/>
+        <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete}/>
       )}
     </div>
   )
