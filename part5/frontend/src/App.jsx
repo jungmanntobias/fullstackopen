@@ -51,13 +51,19 @@ const App = () => {
     }
   }
 
-  const handleCreate = async (event) => {
+  const handleCreate = async () => {
+    event.preventDefault()
     const newBlog = {
       title: title,
       author: author,
       url: url
     }
     await blogService.create(newBlog)
+    setIsError(false)
+    setMessage(`a new blog ${title} by ${author} added`)
+    setTimeout(() => {
+        setMessage(null)
+      }, 5000)
 
   }
 
@@ -107,6 +113,7 @@ const App = () => {
       </p>
 
       <h2>create new</h2>
+      <Notification message={message} isError={isError} />
       <form onSubmit={handleCreate}>
           <div>
             <label>
