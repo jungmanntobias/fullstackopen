@@ -15,6 +15,7 @@ const Blog = (props) => {
   const [buttonLabel, setButtonLabel] = useState('view')
 
   const showWhenVisible = { display: visible ? '' : 'none' }
+  const showDelete = { display: blog.user.id === props.userid ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -28,7 +29,7 @@ const Blog = (props) => {
         <p style={{ margin: 0 }}>url: {blog.url}</p>
         <p style={{ margin: 0 }}>likes: {blog.likes} <button onClick={() => props.handleLike(blog)}>like</button></p>
         <p style={{ margin: 0 }}>user: {blog.user.name}</p>
-        <button onClick={() => props.handleDelete(blog)}>delete</button>
+        <button style={showDelete} onClick={() => props.handleDelete(blog)}>delete</button>
       </div>
     </div>
   )

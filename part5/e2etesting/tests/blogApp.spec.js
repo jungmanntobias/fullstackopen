@@ -103,5 +103,31 @@ describe('Blog app', () => {
         // check that likes turn from 0 to 1
         await expect(page.getByText('new title: new author', { exact: false })).not.toBeVisible()
       })
+      
+      test('a blog cant be deleted by someone other than its owner', async ({ page, request }) => {
+        // click logout
+        await page.getByRole('button', { name: 'log out' }).click()
+
+        // add second user
+        await request.post('/api/users', {
+          data: {
+            username: 'testusername2',
+            name: 'test name 2',
+            password: 'password2'
+          }
+        })
+
+        // login with second user
+        await page.getByLabel('username').fill('testusername2')
+        await page.getByLabel('password').fill('password2')
+        await page.getByRole('button').click()
+
+        // click view
+        await page.getByRole('button', { name: 'view' }).first().click()
+
+        // check that delete button is not rendered for non-owner
+        await expect(page.getByRole('button', { name: 'delete' })).not.toBeVisible()
+      })
+
     })
 })
