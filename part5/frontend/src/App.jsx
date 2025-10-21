@@ -36,6 +36,8 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password })
       setUser(user)
+      // set API token for subsequent authorized requests
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
 
@@ -124,6 +126,8 @@ const App = () => {
       <p>{user.name} logged in
         <button type="submit" onClick={() => {
           window.localStorage.removeItem('loggedBlogappUser')
+          // clear API token on logout
+          blogService.setToken(null)
           setUser(null)
         }}>
           log out
