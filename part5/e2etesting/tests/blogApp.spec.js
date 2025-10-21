@@ -91,5 +91,17 @@ describe('Blog app', () => {
         await page.getByRole('button', { name: 'like' }).click()
         await expect(likes).toContainText('likes: 1')
       })
+
+      test('a blog can be deleted by its owner', async ({ page }) => {
+        // click view
+        await page.getByRole('button', { name: 'view' }).first().click()
+
+        // click delete (and accept the dialog)
+        page.on('dialog', dialog => dialog.accept())
+        await page.getByRole('button', { name: 'delete' }).first().click()
+
+        // check that likes turn from 0 to 1
+        await expect(page.getByText('new title: new author', { exact: false })).not.toBeVisible()
+      })
     })
 })
