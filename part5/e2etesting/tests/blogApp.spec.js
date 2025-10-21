@@ -154,7 +154,7 @@ describe('Blog app', () => {
         await page.getByText('new title: new author').waitFor()
       })
 
-      test('blogs are in ascending order by likes', async ({ page }) => {
+      test('blogs are in descending order by likes', async ({ page }) => {
         // click both blogs open
         await page.getByRole('button', { name: 'view' }).first().click()
         await page.getByRole('button', { name: 'view' }).last().click()
