@@ -130,4 +130,42 @@ describe('Blog app', () => {
       })
 
     })
+
+    describe('When logged in and two blogs exists', () => {
+      beforeEach(async ({ page }) => {
+        // Login
+        await page.getByLabel('username').fill('testusername')
+        await page.getByLabel('password').fill('password')
+        await page.getByRole('button').click()
+
+        // Add blog
+        await page.getByRole('button', { name: 'create new blog' }).click()
+        await page.getByLabel('title').fill('new title')
+        await page.getByLabel('author').fill('new author')
+        await page.getByLabel('url').fill('new url')
+        await page.getByRole('button', { name: 'create' }).click()
+        await page.getByText('new title: new author').waitFor()
+
+        // Add blog
+        await page.getByLabel('title').fill('new title 2')
+        await page.getByLabel('author').fill('new author 2')
+        await page.getByLabel('url').fill('new url 2')
+        await page.getByRole('button', { name: 'create' }).click()
+        await page.getByText('new title: new author').waitFor()
+      })
+
+      test('blogs are in ascending order by likes', async ({ page }) => {
+        // click both blogs open
+        await page.getByRole('button', { name: 'view' }).first().click()
+        await page.getByRole('button', { name: 'view' }).last().click()
+
+        // like the last blog
+        await page.getByRole('button', { name: 'like' }).last().click()
+
+        // search for the likes and verify that the top blog has 1 like
+        const topLikes = page.getByText('likes:', { exact: false }).first()
+        await expect(topLikes).toContainText('likes: 1')
+      })
+
+    })
 })
