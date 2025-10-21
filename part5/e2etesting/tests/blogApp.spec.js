@@ -2,6 +2,17 @@ const { test, expect, beforeEach, describe } = require('@playwright/test')
 
 describe('Blog app', () => {
   beforeEach(async ({ page }) => {
+    // reset test database
+    await request.post('/api/testing/reset')
+    // add user
+    await request.post('/api/users', {
+      data: {
+        username: 'testusername',
+        name: 'test name',
+        password: 'password'
+      }
+    })
+
     await page.goto('/')
   })
 
@@ -11,4 +22,15 @@ describe('Blog app', () => {
     // console.log(locator)
     await expect(locator).toBeVisible()
   })
+
+  describe('Login', () => {
+    test.only('succeeds with correct credentials', async ({ page }) => {
+      // ...
+    })
+
+    test('fails with wrong credentials', async ({ page }) => {
+      // ...
+    })
+  })
+
 })
